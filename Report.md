@@ -45,6 +45,7 @@
 **Why:** Test3 should pass as it applies the same functions and internal logic of test1.  
   
   
+  
 ##  Disk Space Management Tests
   
 ###  Test1
@@ -125,9 +126,10 @@ We are trying to de allocate negative run of pages. Which gives us a ```InvalidR
 **Behavior:** PASS  
 **Why:** We are performing valid operations  
   
-**Test:** We are de allocating the last two pages to test the boundary conditions of the space map.
+**Test:** We are de allocating the last two pages to test the boundary conditions of the space map.  
 **Behavior:** PASS  
 **Why:** The boundary conditions are valid because we are passing the correct page id by subtracting the database overhead from dbsize to the deallocate_page() function.  
+  
   
   
 ##  Heap File Tests:
@@ -216,6 +218,7 @@ We are trying to de allocate negative run of pages. Which gives us a ```InvalidR
 **Why:** We cant insert records which have size greater than the page size which is 1024 bytes.  
   
   
+  
 ##  Index tests
   
 ###  Test1
@@ -266,12 +269,15 @@ We are trying to de allocate negative run of pages. Which gives us a ```InvalidR
   
   
   
+  
+  
 **Test:** 
 **Behaviour:** 
 **Why:** 
 **Test:** 
 **Behaviour:** 
 **Why:** 
+  
   
   
 ##  Sort Tests

@@ -297,6 +297,23 @@ We are trying to de allocate negative run of pages. Which gives us a ```InvalidR
   
   
   
+##  B Tree Tests
+  
+B-tree is a self-balancing tree data structure that maintains sorted data and allows searches, sequential access, insertions, and deletions in logarithmic time.  
+  
+The B+ tree is a B tree that stores the data only at the leaf nodes of the tree. The leaf nodes of the B+ tree also allows sequential access of data because they are joined by pointers in the form of a linked list.  
+  
+These B Tree tests are interactive and requires the user to input an option ranging from 0-19.  
+  
+**Test 1:** 
+In this test, there is a prompt to the user to enter the number of records (N). On entering this number, a new file is created to store the BTree file. Records ```(KEY, RID (pageno, i))``` are created in a for loop which run N times.
+  
+**Test 2:** 
+In this test, there is a prompt to the user to enter the number of records (N). On entering this number, a new file is created to store the BTree file. Records ```(KEY, RID (pageno, N-i))``` are created in a for loop which run N times. The N records are inserted in reverse order.
+  
+**Test 3:** Insert N records at random. The records ```(KEY, RID (pageno, k))``` are created in the BTree file in for loop which runs N times. Where the value of k is randomly generated.  
+  
+**Test 4:** Insert N records then delete M records from the BTree. First M number of ```(KEY, RID)``` random value pairs are created and are checked if they are present in the BTree file. Delete the record if the b tree consists that pair. 
   
   
   
@@ -449,761 +466,7 @@ Unknown. “BUFFER MANAGEMENT.” Blogspot.com, Feb. 2021, dbmsfortech.blogspot.
   
 ```
 Script started on 2021-01-25 18:27:29-07:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="189" LINES="42"]
-]0;machine7@machine7-VirtualBox: ~/Desktop/Database_Management_System_Implementation/minjava/javaminibase/src[01;32mmachine7@machine7-VirtualBox[00m:[01;34m~/Desktop/Database_Management_System_Implementation/minjava/javaminibase/src[00m<img src="https://latex.codecogs.com/gif.latex?make test
-cd tests; make bmtest dbtest; whoami; make hftest bttest indextest jointest sorttest sortmerge
-make[1]: Entering directory &#x27;&#x2F;home&#x2F;machine7&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src&#x2F;tests&#x27;
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac -classpath .:.. TestDriver.java BMTest.java
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java  -classpath .:.. tests.BMTest
-
-Running Buffer Management tests....
-Replacer: Clock
-
-
-  Test 1 does a simple test of normal buffer manager operations:
-  - Allocate a bunch of new pages
-  - Write something on each one
-  - Read that something back from each one
-   (because we&#x27;re buffering, this is where most of the writes happen)
-  - Free the pages again
-  Test 1 completed successfully.
-
-  Test 2 exercises some illegal buffer manager operations:
-  - Try to pin more pages than there are frames
-*** Pinning too many pages
-  --&gt; Failed as expected 
-
-  - Try to free a doubly-pinned page
-*** Freeing a pinned page
-  --&gt; Failed as expected 
-
-  - Try to unpin a page not in the buffer pool
-*** Unpinning a page not in the buffer pool
-  --&gt; Failed as expected 
-
-  Test 2 completed successfully.
-
-  Test 3 exercises some of the internals of the buffer manager
-  - Allocate and dirty some new pages, one at a time, and leave some pinned
-  - Read the pages
-  Test 3 completed successfully.
-
-...Buffer Management tests completely successfully.
-
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac -classpath .:.. TestDriver.java DBTest.java
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java  -classpath .:.. tests.DBTest
-
-Running Disk Space Management tests....
-
-Replacer: Clock
-
-
-  Test 1 creates a new database and does some tests of normal operations:
-  - Add some file entries
-  - Allocate a run of pages
-  - Write something on some of them
-  - Deallocate the rest of them
-  Test 1 completed successfully.
-
-  Test 2 opens the database created in test 1 and does some further tests:
-  - Delete some of the file entries
-  - Look up file entries that should still be there
-  - Read stuff back from pages we wrote in test 1
-  Test 2 completed successfully.
-
-  Test 3 tests for some error conditions:
-  - Look up a deleted file entry
-**** Looking up a deleted file entry
-  --&gt; Failed as expected 
-
-  - Try to delete a deleted entry again
-**** Delete a deleted file entry again
-  --&gt; Failed as expected 
-
-  - Try to delete a nonexistent file entry
-**** Deleting a nonexistent file entry
-  --&gt; Failed as expected 
-
-  - Look up a nonexistent file entry
-**** Looking up a nonexistent file entry
-  --&gt; Failed as expected 
-
-  - Try to add a file entry that&#x27;s already there
-**** Adding a duplicate file entry
-  --&gt; Failed as expected 
-
-  - Try to add a file entry whose name is too long
-**** Adding a file entry with too long a name
-  --&gt; Failed as expected 
-
-  - Try to allocate a run of pages that&#x27;s too long 
-**** Allocating a run that&#x27;s too long
-  --&gt; Failed as expected 
-
-  - Try to allocate a negative run of pages 
-**** Allocating a negative run
-  --&gt; Failed as expected 
-
-  - Try to deallocate a negative run of pages 
-**** Deallocating a negative run
-  --&gt; Failed as expected 
-
-  Test 3 completed successfully.
-
-  Test 4 tests some boundary conditions.
-    (These tests are very implementation-specific.)
-  - Make sure no pages are pinned
-  - Allocate all pages remaining after DB overhead is accounted for
-  - Attempt to allocate one more page
-**** Allocating one additional page
-  --&gt; Failed as expected 
-
-  - Free some of the allocated pages
-  - Allocate some of the just-freed pages
-  - Free two continued run of the allocated pages
-  - Allocate back number of pages equal to the just freed pages
-
-  - Add enough file entries that the directory must surpass a page
-  - Make sure that the directory has taken up an extra page: try to
-    allocate more pages than should be available
-**** Allocating more pages than are now available
-   --&gt; Failed as expected 
-
-  - At this point, all pages should be claimed.  Try to allocateone more.
-**** Allocating one more page than there is
-   --&gt; Failed as expected 
-
-  - Free the last two pages: this tests a boundary condition in the space map.
-  Test 4 completed successfully.
-
-...Disk Space Management tests completely successfully.
-
-make[1]: Leaving directory &#x27;&#x2F;home&#x2F;machine7&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src&#x2F;tests&#x27;
-machine7
-make[1]: Entering directory &#x27;&#x2F;home&#x2F;machine7&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src&#x2F;tests&#x27;
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac -classpath .:.. TestDriver.java HFTest.java
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java  -classpath .:.. tests.HFTest
-
-Running Heap File tests....
-
-Replacer: Clock
-
-
-  Test 1: Insert and scan fixed-size records
-
-  - Create a heap file
-
-  - Add 100 records to the file
-
-  - Scan the records just inserted
-
-  Test 1 completed successfully.
-
-
-  Test 2: Delete fixed-size records
-
-  - Open the same heap file as test 1
-
-  - Delete half the records
-
-  - Scan the remaining records
-
-  Test 2 completed successfully.
-
-
-  Test 3: Update fixed-size records
-
-  - Open the same heap file as tests 1 and 2
-
-  - Change the records
-
-  - Check that the updates are really there
-
-  Test 3 completed successfully.
-
-
-  Test 4: Test some error conditions
-
-  - Try to change the size of a record
-
-**** Shortening a record
-  --&gt; Failed as expected 
-
-**** Lengthening a record
-  --&gt; Failed as expected 
-
-  - Try to insert a record that&#x27;s too long
-
-**** Inserting a too-long record
-  --&gt; Failed as expected 
-
-  Test 4 completed successfully.
-
-
-...Heap File tests completely successfully.
-
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac -classpath .:.. TestDriver.java BTTest.java
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java  -classpath .:.. tests.BTTest
-Replacer: Clock
-
-
-Running  tests....
-
- ***************** The file name is: AAA0  **********
--------------------------- MENU ------------------
-
-
-[0]   Naive delete (new file)
-[1]   Full delete(Default) (new file)
-
-[2]   Print the B+ Tree Structure
-[3]   Print All Leaf Pages
-[4]   Choose a Page to Print
-
-           ---Integer Key (for choices [6]-[14]) ---
-
-[5]   Insert a Record
-[6]   Delete a Record
-[7]   Test1 (new file): insert n records in order
-[8]   Test2 (new file): insert n records in reverse order
-[9]   Test3 (new file): insert n records in random order
-[10]  Test4 (new file): insert n records in random order
-      and delete m records randomly
-[11]  Delete some records
-
-[12]  Initialize a Scan
-[13]  Scan the next Record
-[14]  Delete the just-scanned record
-
-           ---String Key (for choice [15]) ---
-
-[15]  Test5 (new file): insert n records in random order  
-        and delete m records randomly.
-
-[16]  Close the file
-[17]  Open which file (input an integer for the file name): 
-[18]  Destroy which file (input an integer for the file name): 
-
-[19]  Quit!
-Hi, make your choice :2
-The Tree is Empty!!!
--------------------------- MENU ------------------
-
-
-[0]   Naive delete (new file)
-[1]   Full delete(Default) (new file)
-
-[2]   Print the B+ Tree Structure
-[3]   Print All Leaf Pages
-[4]   Choose a Page to Print
-
-           ---Integer Key (for choices [6]-[14]) ---
-
-[5]   Insert a Record
-[6]   Delete a Record
-[7]   Test1 (new file): insert n records in order
-[8]   Test2 (new file): insert n records in reverse order
-[9]   Test3 (new file): insert n records in random order
-[10]  Test4 (new file): insert n records in random order
-      and delete m records randomly
-[11]  Delete some records
-
-[12]  Initialize a Scan
-[13]  Scan the next Record
-[14]  Delete the just-scanned record
-
-           ---String Key (for choice [15]) ---
-
-[15]  Test5 (new file): insert n records in random order  
-        and delete m records randomly.
-
-[16]  Close the file
-[17]  Open which file (input an integer for the file name): 
-[18]  Destroy which file (input an integer for the file name): 
-
-[19]  Quit!
-Hi, make your choice :7
-Please input the number of keys to insert: 
-5
- ***************** The file name is: AAA1  **********
--------------------------- MENU ------------------
-
-
-[0]   Naive delete (new file)
-[1]   Full delete(Default) (new file)
-
-[2]   Print the B+ Tree Structure
-[3]   Print All Leaf Pages
-[4]   Choose a Page to Print
-
-           ---Integer Key (for choices [6]-[14]) ---
-
-[5]   Insert a Record
-[6]   Delete a Record
-[7]   Test1 (new file): insert n records in order
-[8]   Test2 (new file): insert n records in reverse order
-[9]   Test3 (new file): insert n records in random order
-[10]  Test4 (new file): insert n records in random order
-      and delete m records randomly
-[11]  Delete some records
-
-[12]  Initialize a Scan
-[13]  Scan the next Record
-[14]  Delete the just-scanned record
-
-           ---String Key (for choice [15]) ---
-
-[15]  Test5 (new file): insert n records in random order  
-        and delete m records randomly.
-
-[16]  Close the file
-[17]  Open which file (input an integer for the file name): 
-[18]  Destroy which file (input an integer for the file name): 
-
-[19]  Quit!
-Hi, make your choice :2
-
-
-
----------------The B+ Tree Structure---------------
-1     4
---------------- End ---------------
-
-
--------------------------- MENU ------------------
-
-
-[0]   Naive delete (new file)
-[1]   Full delete(Default) (new file)
-
-[2]   Print the B+ Tree Structure
-[3]   Print All Leaf Pages
-[4]   Choose a Page to Print
-
-           ---Integer Key (for choices [6]-[14]) ---
-
-[5]   Insert a Record
-[6]   Delete a Record
-[7]   Test1 (new file): insert n records in order
-[8]   Test2 (new file): insert n records in reverse order
-[9]   Test3 (new file): insert n records in random order
-[10]  Test4 (new file): insert n records in random order
-      and delete m records randomly
-[11]  Delete some records
-
-[12]  Initialize a Scan
-[13]  Scan the next Record
-[14]  Delete the just-scanned record
-
-           ---String Key (for choice [15]) ---
-
-[15]  Test5 (new file): insert n records in random order  
-        and delete m records randomly.
-
-[16]  Close the file
-[17]  Open which file (input an integer for the file name): 
-[18]  Destroy which file (input an integer for the file name): 
-
-[19]  Quit!
-Hi, make your choice :3
-
-
-
----------------The B+ Tree Leaf Pages---------------
-
-**************To Print an Leaf Page ********
-Current Page ID: 4
-Left Link      : -1
-Right Link     : -1
-0 (key, [pageNo, slotNo]):   (0,  [ 0 0 ] )
-1 (key, [pageNo, slotNo]):   (1,  [ 1 1 ] )
-2 (key, [pageNo, slotNo]):   (2,  [ 2 2 ] )
-3 (key, [pageNo, slotNo]):   (3,  [ 3 3 ] )
-4 (key, [pageNo, slotNo]):   (4,  [ 4 4 ] )
-************** END ********
-
-
-
-------------- All Leaf Pages Have Been Printed --------
-
-
--------------------------- MENU ------------------
-
-
-[0]   Naive delete (new file)
-[1]   Full delete(Default) (new file)
-
-[2]   Print the B+ Tree Structure
-[3]   Print All Leaf Pages
-[4]   Choose a Page to Print
-
-           ---Integer Key (for choices [6]-[14]) ---
-
-[5]   Insert a Record
-[6]   Delete a Record
-[7]   Test1 (new file): insert n records in order
-[8]   Test2 (new file): insert n records in reverse order
-[9]   Test3 (new file): insert n records in random order
-[10]  Test4 (new file): insert n records in random order
-      and delete m records randomly
-[11]  Delete some records
-
-[12]  Initialize a Scan
-[13]  Scan the next Record
-[14]  Delete the just-scanned record
-
-           ---String Key (for choice [15]) ---
-
-[15]  Test5 (new file): insert n records in random order  
-        and delete m records randomly.
-
-[16]  Close the file
-[17]  Open which file (input an integer for the file name): 
-[18]  Destroy which file (input an integer for the file name): 
-
-[19]  Quit!
-Hi, make your choice :19
-
-... Finished .
-
-
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac -classpath .:.. TestDriver.java IndexTest.java
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java  -classpath .:.. tests.IndexTest
-
-Running Index tests....
-
-Replacer: Clock
-
------------------------- TEST 1 --------------------------
-BTreeIndex created successfully.
-
-BTreeIndex file created successfully.
-
-Test1 -- Index Scan OK
-------------------- TEST 1 completed ---------------------
-
------------------------- TEST 2 --------------------------
-BTreeIndex opened successfully.
-
-Test2 -- Index Scan OK
-------------------- TEST 2 completed ---------------------
-
------------------------- TEST 3 --------------------------
-BTreeIndex created successfully.
-
-BTreeIndex file created successfully.
-
-Test3 -- Index scan on int key OK
-
-------------------- TEST 3 completed ---------------------
-
-
-...Index tests 
-completely successfully
-.
-
-
-Index tests completed successfully
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac -classpath .:.. TestDriver.java JoinTest.java
-Note: Some input files use unchecked or unsafe operations.
-Note: Recompile with -Xlint:unchecked for details.
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java  -classpath .:.. tests.JoinTest
-Replacer: Clock
-
-
-
-Any resemblance of persons in this database to people living or dead
-is purely coincidental. The contents of this database do not reflect
-the views of the University, the Computer  Sciences Department or the
-developers...
-
-**********************Query1 strating *********************
-Query: Find the names of sailors who have reserved boat number 1.
-       and print out the date of reservation.
-
-  SELECT S.sname, R.date
-  FROM   Sailors S, Reserves R
-  WHERE  S.sid = R.sid AND R.bid = 1
-
-
-(Tests FileScan, Projection, and Sort-Merge Join)
-[Mike Carey, 05&#x2F;10&#x2F;95]
-[David Dewitt, 05&#x2F;11&#x2F;95]
-[Jeff Naughton, 05&#x2F;12&#x2F;95]
-
-Query1 completed successfully!
-*******************Query1 finished!!!*****************
-
-
-
-**********************Query2 strating *********************
-Query: Find the names of sailors who have reserved a red boat
-       and return them in alphabetical order.
-
-  SELECT   S.sname
-  FROM     Sailors S, Boats B, Reserves R
-  WHERE    S.sid = R.sid AND R.bid = B.bid AND B.color = &#x27;red&#x27;
-  ORDER BY S.sname
-Plan used:
- Sort (Pi(sname) (Sigma(B.color=&#x27;red&#x27;)  |&gt;&lt;|  Pi(sname, bid) (S  |&gt;&lt;|  R)))
-
-(Tests File scan, Index scan ,Projection,  index selection,
- sort and simple nested-loop join.)
-
-After Building btree index on sailors.sid.
-
-[David Dewitt]
-[Mike Carey]
-[Raghu Ramakrishnan]
-[Yannis Ioannidis]
-
-Query2 completed successfully!
-*******************Query2 finished!!!*****************
-
-
-
-**********************Query3 strating *********************
-Query: Find the names of sailors who have reserved a boat.
-
-  SELECT S.sname
-  FROM   Sailors S, Reserves R
-  WHERE  S.sid = R.sid
-
-(Tests FileScan, Projection, and SortMerge Join.)
-
-[Mike Carey]
-[Mike Carey]
-[Mike Carey]
-[David Dewitt]
-[David Dewitt]
-[Jeff Naughton]
-[Miron Livny]
-[Yannis Ioannidis]
-[Raghu Ramakrishnan]
-[Raghu Ramakrishnan]
-
-Query3 completed successfully!
-*******************Query3 finished!!!*****************
-
-
-
-**********************Query4 strating *********************
-Query: Find the names of sailors who have reserved a boat
-       and print each name once.
-
-  SELECT DISTINCT S.sname
-  FROM   Sailors S, Reserves R
-  WHERE  S.sid = R.sid
-
-(Tests FileScan, Projection, Sort-Merge Join and Duplication elimination.)
-
-[David Dewitt]
-[Jeff Naughton]
-[Mike Carey]
-[Miron Livny]
-[Raghu Ramakrishnan]
-[Yannis Ioannidis]
-
-Query4 completed successfully!
-*******************Query4 finished!!!*****************
-
-
-
-**********************Query5 strating *********************
-Query: Find the names of old sailors or sailors with a rating less
-       than 7, who have reserved a boat, (perhaps to increase the
-       amount they have to pay to make a reservation).
-
-  SELECT S.sname, S.rating, S.age
-  FROM   Sailors S, Reserves R
-  WHERE  S.sid = R.sid and (S.age &gt; 40 || S.rating &lt; 7)
-
-(Tests FileScan, Multiple Selection, Projection, and Sort-Merge Join.)
-
-[Mike Carey, 9, 40.3]
-[Mike Carey, 9, 40.3]
-[Mike Carey, 9, 40.3]
-[David Dewitt, 10, 47.2]
-[David Dewitt, 10, 47.2]
-[Jeff Naughton, 5, 35.0]
-[Yannis Ioannidis, 8, 40.2]
-
-Query5 completed successfully!
-*******************Query5 finished!!!*****************
-
-
-
-**********************Query6 strating *********************
-Query: Find the names of sailors with a rating greater than 7
-  who have reserved a red boat, and print them out in sorted order.
-
-  SELECT   S.sname
-  FROM     Sailors S, Boats B, Reserves R
-  WHERE    S.sid = R.sid AND S.rating &gt; 7 AND R.bid = B.bid 
-           AND B.color = &#x27;red&#x27;
-  ORDER BY S.name
-
-Plan used:
- Sort(Pi(sname) (Sigma(B.color=&#x27;red&#x27;)  |&gt;&lt;|  Pi(sname, bid) (Sigma(S.rating &gt; 7)  |&gt;&lt;|  R)))
-
-(Tests FileScan, Multiple Selection, Projection,sort and nested-loop join.)
-
-After nested loop join S.sid|&gt;&lt;|R.sid.
-After nested loop join R.bid|&gt;&lt;|B.bid AND B.color=red.
-After sorting the output tuples.
-[David Dewitt]
-[Mike Carey]
-[Raghu Ramakrishnan]
-[Yannis Ioannidis]
-
-Query6 completed successfully!
-*******************Query6 finished!!!*****************
-
-
-
-Finished joins testing
-join tests completed successfully
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac -classpath .:.. TestDriver.java SortTest.java
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java  -classpath .:.. tests.SortTest
-
-Running Sort tests....
-
-Replacer: Clock
-
------------------------- TEST 1 --------------------------
-Test1 -- Sorting OK
-------------------- TEST 1 completed ---------------------
-
------------------------- TEST 2 --------------------------
-Test2 -- Sorting OK
-------------------- TEST 2 completed ---------------------
-
------------------------- TEST 3 --------------------------
- -- Sorting in ascending order on the int field -- 
-Test3 -- Sorting of int field OK
-
- -- Sorting in descending order on the float field -- 
-Test3 -- Sorting of float field OK
-
-------------------- TEST 3 completed ---------------------
-
------------------------- TEST 4 --------------------------
-Test4 -- Sorting OK
-------------------- TEST 4 completed ---------------------
-
-
-...Sort tests 
-completely successfully
-.
-
-
-Sorting tests completed successfully
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac -classpath .:.. SM_JoinTest.java TestDriver.java
-Note: SM_JoinTest.java uses unchecked or unsafe operations.
-Note: Recompile with -Xlint:unchecked for details.
-&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java  -classpath .:.. tests.SM_JoinTest
-Replacer: Clock
-
-
-
-Any resemblance of persons in this database to people living or dead
-is purely coincidental. The contents of this database do not reflect
-the views of the University, the Computer  Sciences Department or the
-developers...
-
-**********************Query1 strating *********************
-Query: Find the names of sailors who have reserved boat number 1.
-       and print out the date of reservation.
-
-  SELECT S.sname, R.date
-  FROM   Sailors S, Reserves R
-  WHERE  S.sid = R.sid AND R.bid = 1
-
-
-(Tests FileScan, Projection, and Sort-Merge Join)
-[Mike Carey, 05&#x2F;10&#x2F;95]
-[David Dewitt, 05&#x2F;11&#x2F;95]
-[Jeff Naughton, 05&#x2F;12&#x2F;95]
-
-Query1 completed successfully!
-*******************Query1 finished!!!*****************
-
-
-
-**********************Query3 strating *********************
-Query: Find the names of sailors who have reserved a boat.
-
-  SELECT S.sname
-  FROM   Sailors S, Reserves R
-  WHERE  S.sid = R.sid
-
-(Tests FileScan, Projection, and SortMerge Join.)
-
-[Mike Carey]
-[Mike Carey]
-[Mike Carey]
-[David Dewitt]
-[David Dewitt]
-[Jeff Naughton]
-[Miron Livny]
-[Yannis Ioannidis]
-[Raghu Ramakrishnan]
-[Raghu Ramakrishnan]
-
-Query3 completed successfully!
-*******************Query3 finished!!!*****************
-
-
-
-**********************Query4 strating *********************
-Query: Find the names of sailors who have reserved a boat
-       and print each name once.
-
-  SELECT DISTINCT S.sname
-  FROM   Sailors S, Reserves R
-  WHERE  S.sid = R.sid
-
-(Tests FileScan, Projection, Sort-Merge Join and Duplication elimination.)
-
-[David Dewitt]
-[Jeff Naughton]
-[Mike Carey]
-[Miron Livny]
-[Raghu Ramakrishnan]
-[Yannis Ioannidis]
-
-Query4 completed successfully!
-*******************Query4 finished!!!*****************
-
-
-
-**********************Query5 strating *********************
-Query: Find the names of old sailors or sailors with a rating less
-       than 7, who have reserved a boat, (perhaps to increase the
-       amount they have to pay to make a reservation).
-
-  SELECT S.sname, S.rating, S.age
-  FROM   Sailors S, Reserves R
-  WHERE  S.sid = R.sid and (S.age &gt; 40 || S.rating &lt; 7)
-
-(Tests FileScan, Multiple Selection, Projection, and Sort-Merge Join.)
-
-[Mike Carey, 9, 40.3]
-[Mike Carey, 9, 40.3]
-[Mike Carey, 9, 40.3]
-[David Dewitt, 10, 47.2]
-[David Dewitt, 10, 47.2]
-[Jeff Naughton, 5, 35.0]
-[Yannis Ioannidis, 8, 40.2]
-
-Query5 completed successfully!
-*******************Query5 finished!!!*****************
-
-
-
-Finished joins testing
-join tests completed successfully
-make[1]: Leaving directory &#x27;&#x2F;home&#x2F;machine7&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src&#x2F;tests&#x27;
-]0;machine7@machine7-VirtualBox: ~&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src[01;32mmachine7@machine7-VirtualBox[00m:[01;34m~&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src[00m"/> exit
+]0;machine7@machine7-VirtualBox: ~/Desktop/Database_Management_System_Implementation/minjava/javaminibase/src[01;32mmachine7@machine7-VirtualBox[00m:[01;34m~/Desktop/Database_Management_System_Implementation/minjava/javaminibase/src[00m<img src="https://latex.codecogs.com/gif.latex?make%20testcd%20tests;%20make%20bmtest%20dbtest;%20whoami;%20make%20hftest%20bttest%20indextest%20jointest%20sorttest%20sortmergemake[1]:%20Entering%20directory%20&#x27;&#x2F;home&#x2F;machine7&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src&#x2F;tests&#x27;&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac%20-classpath%20.:..%20TestDriver.java%20BMTest.java&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java%20%20-classpath%20.:..%20tests.BMTestRunning%20Buffer%20Management%20tests....Replacer:%20Clock%20%20Test%201%20does%20a%20simple%20test%20of%20normal%20buffer%20manager%20operations:%20%20-%20Allocate%20a%20bunch%20of%20new%20pages%20%20-%20Write%20something%20on%20each%20one%20%20-%20Read%20that%20something%20back%20from%20each%20one%20%20%20(because%20we&#x27;re%20buffering,%20this%20is%20where%20most%20of%20the%20writes%20happen)%20%20-%20Free%20the%20pages%20again%20%20Test%201%20completed%20successfully.%20%20Test%202%20exercises%20some%20illegal%20buffer%20manager%20operations:%20%20-%20Try%20to%20pin%20more%20pages%20than%20there%20are%20frames***%20Pinning%20too%20many%20pages%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20free%20a%20doubly-pinned%20page***%20Freeing%20a%20pinned%20page%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20unpin%20a%20page%20not%20in%20the%20buffer%20pool***%20Unpinning%20a%20page%20not%20in%20the%20buffer%20pool%20%20--&gt;%20Failed%20as%20expected%20%20%20Test%202%20completed%20successfully.%20%20Test%203%20exercises%20some%20of%20the%20internals%20of%20the%20buffer%20manager%20%20-%20Allocate%20and%20dirty%20some%20new%20pages,%20one%20at%20a%20time,%20and%20leave%20some%20pinned%20%20-%20Read%20the%20pages%20%20Test%203%20completed%20successfully....Buffer%20Management%20tests%20completely%20successfully.&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac%20-classpath%20.:..%20TestDriver.java%20DBTest.java&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java%20%20-classpath%20.:..%20tests.DBTestRunning%20Disk%20Space%20Management%20tests....Replacer:%20Clock%20%20Test%201%20creates%20a%20new%20database%20and%20does%20some%20tests%20of%20normal%20operations:%20%20-%20Add%20some%20file%20entries%20%20-%20Allocate%20a%20run%20of%20pages%20%20-%20Write%20something%20on%20some%20of%20them%20%20-%20Deallocate%20the%20rest%20of%20them%20%20Test%201%20completed%20successfully.%20%20Test%202%20opens%20the%20database%20created%20in%20test%201%20and%20does%20some%20further%20tests:%20%20-%20Delete%20some%20of%20the%20file%20entries%20%20-%20Look%20up%20file%20entries%20that%20should%20still%20be%20there%20%20-%20Read%20stuff%20back%20from%20pages%20we%20wrote%20in%20test%201%20%20Test%202%20completed%20successfully.%20%20Test%203%20tests%20for%20some%20error%20conditions:%20%20-%20Look%20up%20a%20deleted%20file%20entry****%20Looking%20up%20a%20deleted%20file%20entry%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20delete%20a%20deleted%20entry%20again****%20Delete%20a%20deleted%20file%20entry%20again%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20delete%20a%20nonexistent%20file%20entry****%20Deleting%20a%20nonexistent%20file%20entry%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Look%20up%20a%20nonexistent%20file%20entry****%20Looking%20up%20a%20nonexistent%20file%20entry%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20add%20a%20file%20entry%20that&#x27;s%20already%20there****%20Adding%20a%20duplicate%20file%20entry%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20add%20a%20file%20entry%20whose%20name%20is%20too%20long****%20Adding%20a%20file%20entry%20with%20too%20long%20a%20name%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20allocate%20a%20run%20of%20pages%20that&#x27;s%20too%20long%20****%20Allocating%20a%20run%20that&#x27;s%20too%20long%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20allocate%20a%20negative%20run%20of%20pages%20****%20Allocating%20a%20negative%20run%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20deallocate%20a%20negative%20run%20of%20pages%20****%20Deallocating%20a%20negative%20run%20%20--&gt;%20Failed%20as%20expected%20%20%20Test%203%20completed%20successfully.%20%20Test%204%20tests%20some%20boundary%20conditions.%20%20%20%20(These%20tests%20are%20very%20implementation-specific.)%20%20-%20Make%20sure%20no%20pages%20are%20pinned%20%20-%20Allocate%20all%20pages%20remaining%20after%20DB%20overhead%20is%20accounted%20for%20%20-%20Attempt%20to%20allocate%20one%20more%20page****%20Allocating%20one%20additional%20page%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Free%20some%20of%20the%20allocated%20pages%20%20-%20Allocate%20some%20of%20the%20just-freed%20pages%20%20-%20Free%20two%20continued%20run%20of%20the%20allocated%20pages%20%20-%20Allocate%20back%20number%20of%20pages%20equal%20to%20the%20just%20freed%20pages%20%20-%20Add%20enough%20file%20entries%20that%20the%20directory%20must%20surpass%20a%20page%20%20-%20Make%20sure%20that%20the%20directory%20has%20taken%20up%20an%20extra%20page:%20try%20to%20%20%20%20allocate%20more%20pages%20than%20should%20be%20available****%20Allocating%20more%20pages%20than%20are%20now%20available%20%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20At%20this%20point,%20all%20pages%20should%20be%20claimed.%20%20Try%20to%20allocateone%20more.****%20Allocating%20one%20more%20page%20than%20there%20is%20%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Free%20the%20last%20two%20pages:%20this%20tests%20a%20boundary%20condition%20in%20the%20space%20map.%20%20Test%204%20completed%20successfully....Disk%20Space%20Management%20tests%20completely%20successfully.make[1]:%20Leaving%20directory%20&#x27;&#x2F;home&#x2F;machine7&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src&#x2F;tests&#x27;machine7make[1]:%20Entering%20directory%20&#x27;&#x2F;home&#x2F;machine7&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src&#x2F;tests&#x27;&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac%20-classpath%20.:..%20TestDriver.java%20HFTest.java&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java%20%20-classpath%20.:..%20tests.HFTestRunning%20Heap%20File%20tests....Replacer:%20Clock%20%20Test%201:%20Insert%20and%20scan%20fixed-size%20records%20%20-%20Create%20a%20heap%20file%20%20-%20Add%20100%20records%20to%20the%20file%20%20-%20Scan%20the%20records%20just%20inserted%20%20Test%201%20completed%20successfully.%20%20Test%202:%20Delete%20fixed-size%20records%20%20-%20Open%20the%20same%20heap%20file%20as%20test%201%20%20-%20Delete%20half%20the%20records%20%20-%20Scan%20the%20remaining%20records%20%20Test%202%20completed%20successfully.%20%20Test%203:%20Update%20fixed-size%20records%20%20-%20Open%20the%20same%20heap%20file%20as%20tests%201%20and%202%20%20-%20Change%20the%20records%20%20-%20Check%20that%20the%20updates%20are%20really%20there%20%20Test%203%20completed%20successfully.%20%20Test%204:%20Test%20some%20error%20conditions%20%20-%20Try%20to%20change%20the%20size%20of%20a%20record****%20Shortening%20a%20record%20%20--&gt;%20Failed%20as%20expected%20****%20Lengthening%20a%20record%20%20--&gt;%20Failed%20as%20expected%20%20%20-%20Try%20to%20insert%20a%20record%20that&#x27;s%20too%20long****%20Inserting%20a%20too-long%20record%20%20--&gt;%20Failed%20as%20expected%20%20%20Test%204%20completed%20successfully....Heap%20File%20tests%20completely%20successfully.&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac%20-classpath%20.:..%20TestDriver.java%20BTTest.java&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java%20%20-classpath%20.:..%20tests.BTTestReplacer:%20ClockRunning%20%20tests....%20*****************%20The%20file%20name%20is:%20AAA0%20%20**********--------------------------%20MENU%20------------------[0]%20%20%20Naive%20delete%20(new%20file)[1]%20%20%20Full%20delete(Default)%20(new%20file)[2]%20%20%20Print%20the%20B+%20Tree%20Structure[3]%20%20%20Print%20All%20Leaf%20Pages[4]%20%20%20Choose%20a%20Page%20to%20Print%20%20%20%20%20%20%20%20%20%20%20---Integer%20Key%20(for%20choices%20[6]-[14])%20---[5]%20%20%20Insert%20a%20Record[6]%20%20%20Delete%20a%20Record[7]%20%20%20Test1%20(new%20file):%20insert%20n%20records%20in%20order[8]%20%20%20Test2%20(new%20file):%20insert%20n%20records%20in%20reverse%20order[9]%20%20%20Test3%20(new%20file):%20insert%20n%20records%20in%20random%20order[10]%20%20Test4%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20and%20delete%20m%20records%20randomly[11]%20%20Delete%20some%20records[12]%20%20Initialize%20a%20Scan[13]%20%20Scan%20the%20next%20Record[14]%20%20Delete%20the%20just-scanned%20record%20%20%20%20%20%20%20%20%20%20%20---String%20Key%20(for%20choice%20[15])%20---[15]%20%20Test5%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20%20%20%20%20and%20delete%20m%20records%20randomly.[16]%20%20Close%20the%20file[17]%20%20Open%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[18]%20%20Destroy%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[19]%20%20Quit!Hi,%20make%20your%20choice%20:2The%20Tree%20is%20Empty!!!--------------------------%20MENU%20------------------[0]%20%20%20Naive%20delete%20(new%20file)[1]%20%20%20Full%20delete(Default)%20(new%20file)[2]%20%20%20Print%20the%20B+%20Tree%20Structure[3]%20%20%20Print%20All%20Leaf%20Pages[4]%20%20%20Choose%20a%20Page%20to%20Print%20%20%20%20%20%20%20%20%20%20%20---Integer%20Key%20(for%20choices%20[6]-[14])%20---[5]%20%20%20Insert%20a%20Record[6]%20%20%20Delete%20a%20Record[7]%20%20%20Test1%20(new%20file):%20insert%20n%20records%20in%20order[8]%20%20%20Test2%20(new%20file):%20insert%20n%20records%20in%20reverse%20order[9]%20%20%20Test3%20(new%20file):%20insert%20n%20records%20in%20random%20order[10]%20%20Test4%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20and%20delete%20m%20records%20randomly[11]%20%20Delete%20some%20records[12]%20%20Initialize%20a%20Scan[13]%20%20Scan%20the%20next%20Record[14]%20%20Delete%20the%20just-scanned%20record%20%20%20%20%20%20%20%20%20%20%20---String%20Key%20(for%20choice%20[15])%20---[15]%20%20Test5%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20%20%20%20%20and%20delete%20m%20records%20randomly.[16]%20%20Close%20the%20file[17]%20%20Open%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[18]%20%20Destroy%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[19]%20%20Quit!Hi,%20make%20your%20choice%20:7Please%20input%20the%20number%20of%20keys%20to%20insert:%205%20*****************%20The%20file%20name%20is:%20AAA1%20%20**********--------------------------%20MENU%20------------------[0]%20%20%20Naive%20delete%20(new%20file)[1]%20%20%20Full%20delete(Default)%20(new%20file)[2]%20%20%20Print%20the%20B+%20Tree%20Structure[3]%20%20%20Print%20All%20Leaf%20Pages[4]%20%20%20Choose%20a%20Page%20to%20Print%20%20%20%20%20%20%20%20%20%20%20---Integer%20Key%20(for%20choices%20[6]-[14])%20---[5]%20%20%20Insert%20a%20Record[6]%20%20%20Delete%20a%20Record[7]%20%20%20Test1%20(new%20file):%20insert%20n%20records%20in%20order[8]%20%20%20Test2%20(new%20file):%20insert%20n%20records%20in%20reverse%20order[9]%20%20%20Test3%20(new%20file):%20insert%20n%20records%20in%20random%20order[10]%20%20Test4%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20and%20delete%20m%20records%20randomly[11]%20%20Delete%20some%20records[12]%20%20Initialize%20a%20Scan[13]%20%20Scan%20the%20next%20Record[14]%20%20Delete%20the%20just-scanned%20record%20%20%20%20%20%20%20%20%20%20%20---String%20Key%20(for%20choice%20[15])%20---[15]%20%20Test5%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20%20%20%20%20and%20delete%20m%20records%20randomly.[16]%20%20Close%20the%20file[17]%20%20Open%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[18]%20%20Destroy%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[19]%20%20Quit!Hi,%20make%20your%20choice%20:2---------------The%20B+%20Tree%20Structure---------------1%20%20%20%20%204---------------%20End%20-----------------------------------------%20MENU%20------------------[0]%20%20%20Naive%20delete%20(new%20file)[1]%20%20%20Full%20delete(Default)%20(new%20file)[2]%20%20%20Print%20the%20B+%20Tree%20Structure[3]%20%20%20Print%20All%20Leaf%20Pages[4]%20%20%20Choose%20a%20Page%20to%20Print%20%20%20%20%20%20%20%20%20%20%20---Integer%20Key%20(for%20choices%20[6]-[14])%20---[5]%20%20%20Insert%20a%20Record[6]%20%20%20Delete%20a%20Record[7]%20%20%20Test1%20(new%20file):%20insert%20n%20records%20in%20order[8]%20%20%20Test2%20(new%20file):%20insert%20n%20records%20in%20reverse%20order[9]%20%20%20Test3%20(new%20file):%20insert%20n%20records%20in%20random%20order[10]%20%20Test4%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20and%20delete%20m%20records%20randomly[11]%20%20Delete%20some%20records[12]%20%20Initialize%20a%20Scan[13]%20%20Scan%20the%20next%20Record[14]%20%20Delete%20the%20just-scanned%20record%20%20%20%20%20%20%20%20%20%20%20---String%20Key%20(for%20choice%20[15])%20---[15]%20%20Test5%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20%20%20%20%20and%20delete%20m%20records%20randomly.[16]%20%20Close%20the%20file[17]%20%20Open%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[18]%20%20Destroy%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[19]%20%20Quit!Hi,%20make%20your%20choice%20:3---------------The%20B+%20Tree%20Leaf%20Pages---------------**************To%20Print%20an%20Leaf%20Page%20********Current%20Page%20ID:%204Left%20Link%20%20%20%20%20%20:%20-1Right%20Link%20%20%20%20%20:%20-10%20(key,%20[pageNo,%20slotNo]):%20%20%20(0,%20%20[%200%200%20]%20)1%20(key,%20[pageNo,%20slotNo]):%20%20%20(1,%20%20[%201%201%20]%20)2%20(key,%20[pageNo,%20slotNo]):%20%20%20(2,%20%20[%202%202%20]%20)3%20(key,%20[pageNo,%20slotNo]):%20%20%20(3,%20%20[%203%203%20]%20)4%20(key,%20[pageNo,%20slotNo]):%20%20%20(4,%20%20[%204%204%20]%20)**************%20END%20********-------------%20All%20Leaf%20Pages%20Have%20Been%20Printed%20----------------------------------%20MENU%20------------------[0]%20%20%20Naive%20delete%20(new%20file)[1]%20%20%20Full%20delete(Default)%20(new%20file)[2]%20%20%20Print%20the%20B+%20Tree%20Structure[3]%20%20%20Print%20All%20Leaf%20Pages[4]%20%20%20Choose%20a%20Page%20to%20Print%20%20%20%20%20%20%20%20%20%20%20---Integer%20Key%20(for%20choices%20[6]-[14])%20---[5]%20%20%20Insert%20a%20Record[6]%20%20%20Delete%20a%20Record[7]%20%20%20Test1%20(new%20file):%20insert%20n%20records%20in%20order[8]%20%20%20Test2%20(new%20file):%20insert%20n%20records%20in%20reverse%20order[9]%20%20%20Test3%20(new%20file):%20insert%20n%20records%20in%20random%20order[10]%20%20Test4%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20and%20delete%20m%20records%20randomly[11]%20%20Delete%20some%20records[12]%20%20Initialize%20a%20Scan[13]%20%20Scan%20the%20next%20Record[14]%20%20Delete%20the%20just-scanned%20record%20%20%20%20%20%20%20%20%20%20%20---String%20Key%20(for%20choice%20[15])%20---[15]%20%20Test5%20(new%20file):%20insert%20n%20records%20in%20random%20order%20%20%20%20%20%20%20%20%20%20and%20delete%20m%20records%20randomly.[16]%20%20Close%20the%20file[17]%20%20Open%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[18]%20%20Destroy%20which%20file%20(input%20an%20integer%20for%20the%20file%20name):%20[19]%20%20Quit!Hi,%20make%20your%20choice%20:19...%20Finished%20.&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac%20-classpath%20.:..%20TestDriver.java%20IndexTest.java&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java%20%20-classpath%20.:..%20tests.IndexTestRunning%20Index%20tests....Replacer:%20Clock------------------------%20TEST%201%20--------------------------BTreeIndex%20created%20successfully.BTreeIndex%20file%20created%20successfully.Test1%20--%20Index%20Scan%20OK-------------------%20TEST%201%20completed%20---------------------------------------------%20TEST%202%20--------------------------BTreeIndex%20opened%20successfully.Test2%20--%20Index%20Scan%20OK-------------------%20TEST%202%20completed%20---------------------------------------------%20TEST%203%20--------------------------BTreeIndex%20created%20successfully.BTreeIndex%20file%20created%20successfully.Test3%20--%20Index%20scan%20on%20int%20key%20OK-------------------%20TEST%203%20completed%20---------------------...Index%20tests%20completely%20successfully.Index%20tests%20completed%20successfully&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac%20-classpath%20.:..%20TestDriver.java%20JoinTest.javaNote:%20Some%20input%20files%20use%20unchecked%20or%20unsafe%20operations.Note:%20Recompile%20with%20-Xlint:unchecked%20for%20details.&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java%20%20-classpath%20.:..%20tests.JoinTestReplacer:%20ClockAny%20resemblance%20of%20persons%20in%20this%20database%20to%20people%20living%20or%20deadis%20purely%20coincidental.%20The%20contents%20of%20this%20database%20do%20not%20reflectthe%20views%20of%20the%20University,%20the%20Computer%20%20Sciences%20Department%20or%20thedevelopers...**********************Query1%20strating%20*********************Query:%20Find%20the%20names%20of%20sailors%20who%20have%20reserved%20boat%20number%201.%20%20%20%20%20%20%20and%20print%20out%20the%20date%20of%20reservation.%20%20SELECT%20S.sname,%20R.date%20%20FROM%20%20%20Sailors%20S,%20Reserves%20R%20%20WHERE%20%20S.sid%20=%20R.sid%20AND%20R.bid%20=%201(Tests%20FileScan,%20Projection,%20and%20Sort-Merge%20Join)[Mike%20Carey,%2005&#x2F;10&#x2F;95][David%20Dewitt,%2005&#x2F;11&#x2F;95][Jeff%20Naughton,%2005&#x2F;12&#x2F;95]Query1%20completed%20successfully!*******************Query1%20finished!!!***************************************Query2%20strating%20*********************Query:%20Find%20the%20names%20of%20sailors%20who%20have%20reserved%20a%20red%20boat%20%20%20%20%20%20%20and%20return%20them%20in%20alphabetical%20order.%20%20SELECT%20%20%20S.sname%20%20FROM%20%20%20%20%20Sailors%20S,%20Boats%20B,%20Reserves%20R%20%20WHERE%20%20%20%20S.sid%20=%20R.sid%20AND%20R.bid%20=%20B.bid%20AND%20B.color%20=%20&#x27;red&#x27;%20%20ORDER%20BY%20S.snamePlan%20used:%20Sort%20(Pi(sname)%20(Sigma(B.color=&#x27;red&#x27;)%20%20|&gt;&lt;|%20%20Pi(sname,%20bid)%20(S%20%20|&gt;&lt;|%20%20R)))(Tests%20File%20scan,%20Index%20scan%20,Projection,%20%20index%20selection,%20sort%20and%20simple%20nested-loop%20join.)After%20Building%20btree%20index%20on%20sailors.sid.[David%20Dewitt][Mike%20Carey][Raghu%20Ramakrishnan][Yannis%20Ioannidis]Query2%20completed%20successfully!*******************Query2%20finished!!!***************************************Query3%20strating%20*********************Query:%20Find%20the%20names%20of%20sailors%20who%20have%20reserved%20a%20boat.%20%20SELECT%20S.sname%20%20FROM%20%20%20Sailors%20S,%20Reserves%20R%20%20WHERE%20%20S.sid%20=%20R.sid(Tests%20FileScan,%20Projection,%20and%20SortMerge%20Join.)[Mike%20Carey][Mike%20Carey][Mike%20Carey][David%20Dewitt][David%20Dewitt][Jeff%20Naughton][Miron%20Livny][Yannis%20Ioannidis][Raghu%20Ramakrishnan][Raghu%20Ramakrishnan]Query3%20completed%20successfully!*******************Query3%20finished!!!***************************************Query4%20strating%20*********************Query:%20Find%20the%20names%20of%20sailors%20who%20have%20reserved%20a%20boat%20%20%20%20%20%20%20and%20print%20each%20name%20once.%20%20SELECT%20DISTINCT%20S.sname%20%20FROM%20%20%20Sailors%20S,%20Reserves%20R%20%20WHERE%20%20S.sid%20=%20R.sid(Tests%20FileScan,%20Projection,%20Sort-Merge%20Join%20and%20Duplication%20elimination.)[David%20Dewitt][Jeff%20Naughton][Mike%20Carey][Miron%20Livny][Raghu%20Ramakrishnan][Yannis%20Ioannidis]Query4%20completed%20successfully!*******************Query4%20finished!!!***************************************Query5%20strating%20*********************Query:%20Find%20the%20names%20of%20old%20sailors%20or%20sailors%20with%20a%20rating%20less%20%20%20%20%20%20%20than%207,%20who%20have%20reserved%20a%20boat,%20(perhaps%20to%20increase%20the%20%20%20%20%20%20%20amount%20they%20have%20to%20pay%20to%20make%20a%20reservation).%20%20SELECT%20S.sname,%20S.rating,%20S.age%20%20FROM%20%20%20Sailors%20S,%20Reserves%20R%20%20WHERE%20%20S.sid%20=%20R.sid%20and%20(S.age%20&gt;%2040%20||%20S.rating%20&lt;%207)(Tests%20FileScan,%20Multiple%20Selection,%20Projection,%20and%20Sort-Merge%20Join.)[Mike%20Carey,%209,%2040.3][Mike%20Carey,%209,%2040.3][Mike%20Carey,%209,%2040.3][David%20Dewitt,%2010,%2047.2][David%20Dewitt,%2010,%2047.2][Jeff%20Naughton,%205,%2035.0][Yannis%20Ioannidis,%208,%2040.2]Query5%20completed%20successfully!*******************Query5%20finished!!!***************************************Query6%20strating%20*********************Query:%20Find%20the%20names%20of%20sailors%20with%20a%20rating%20greater%20than%207%20%20who%20have%20reserved%20a%20red%20boat,%20and%20print%20them%20out%20in%20sorted%20order.%20%20SELECT%20%20%20S.sname%20%20FROM%20%20%20%20%20Sailors%20S,%20Boats%20B,%20Reserves%20R%20%20WHERE%20%20%20%20S.sid%20=%20R.sid%20AND%20S.rating%20&gt;%207%20AND%20R.bid%20=%20B.bid%20%20%20%20%20%20%20%20%20%20%20%20AND%20B.color%20=%20&#x27;red&#x27;%20%20ORDER%20BY%20S.namePlan%20used:%20Sort(Pi(sname)%20(Sigma(B.color=&#x27;red&#x27;)%20%20|&gt;&lt;|%20%20Pi(sname,%20bid)%20(Sigma(S.rating%20&gt;%207)%20%20|&gt;&lt;|%20%20R)))(Tests%20FileScan,%20Multiple%20Selection,%20Projection,sort%20and%20nested-loop%20join.)After%20nested%20loop%20join%20S.sid|&gt;&lt;|R.sid.After%20nested%20loop%20join%20R.bid|&gt;&lt;|B.bid%20AND%20B.color=red.After%20sorting%20the%20output%20tuples.[David%20Dewitt][Mike%20Carey][Raghu%20Ramakrishnan][Yannis%20Ioannidis]Query6%20completed%20successfully!*******************Query6%20finished!!!*****************Finished%20joins%20testingjoin%20tests%20completed%20successfully&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac%20-classpath%20.:..%20TestDriver.java%20SortTest.java&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java%20%20-classpath%20.:..%20tests.SortTestRunning%20Sort%20tests....Replacer:%20Clock------------------------%20TEST%201%20--------------------------Test1%20--%20Sorting%20OK-------------------%20TEST%201%20completed%20---------------------------------------------%20TEST%202%20--------------------------Test2%20--%20Sorting%20OK-------------------%20TEST%202%20completed%20---------------------------------------------%20TEST%203%20--------------------------%20--%20Sorting%20in%20ascending%20order%20on%20the%20int%20field%20--%20Test3%20--%20Sorting%20of%20int%20field%20OK%20--%20Sorting%20in%20descending%20order%20on%20the%20float%20field%20--%20Test3%20--%20Sorting%20of%20float%20field%20OK-------------------%20TEST%203%20completed%20---------------------------------------------%20TEST%204%20--------------------------Test4%20--%20Sorting%20OK-------------------%20TEST%204%20completed%20---------------------...Sort%20tests%20completely%20successfully.Sorting%20tests%20completed%20successfully&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;javac%20-classpath%20.:..%20SM_JoinTest.java%20TestDriver.javaNote:%20SM_JoinTest.java%20uses%20unchecked%20or%20unsafe%20operations.Note:%20Recompile%20with%20-Xlint:unchecked%20for%20details.&#x2F;usr&#x2F;lib&#x2F;jvm&#x2F;default-java&#x2F;bin&#x2F;java%20%20-classpath%20.:..%20tests.SM_JoinTestReplacer:%20ClockAny%20resemblance%20of%20persons%20in%20this%20database%20to%20people%20living%20or%20deadis%20purely%20coincidental.%20The%20contents%20of%20this%20database%20do%20not%20reflectthe%20views%20of%20the%20University,%20the%20Computer%20%20Sciences%20Department%20or%20thedevelopers...**********************Query1%20strating%20*********************Query:%20Find%20the%20names%20of%20sailors%20who%20have%20reserved%20boat%20number%201.%20%20%20%20%20%20%20and%20print%20out%20the%20date%20of%20reservation.%20%20SELECT%20S.sname,%20R.date%20%20FROM%20%20%20Sailors%20S,%20Reserves%20R%20%20WHERE%20%20S.sid%20=%20R.sid%20AND%20R.bid%20=%201(Tests%20FileScan,%20Projection,%20and%20Sort-Merge%20Join)[Mike%20Carey,%2005&#x2F;10&#x2F;95][David%20Dewitt,%2005&#x2F;11&#x2F;95][Jeff%20Naughton,%2005&#x2F;12&#x2F;95]Query1%20completed%20successfully!*******************Query1%20finished!!!***************************************Query3%20strating%20*********************Query:%20Find%20the%20names%20of%20sailors%20who%20have%20reserved%20a%20boat.%20%20SELECT%20S.sname%20%20FROM%20%20%20Sailors%20S,%20Reserves%20R%20%20WHERE%20%20S.sid%20=%20R.sid(Tests%20FileScan,%20Projection,%20and%20SortMerge%20Join.)[Mike%20Carey][Mike%20Carey][Mike%20Carey][David%20Dewitt][David%20Dewitt][Jeff%20Naughton][Miron%20Livny][Yannis%20Ioannidis][Raghu%20Ramakrishnan][Raghu%20Ramakrishnan]Query3%20completed%20successfully!*******************Query3%20finished!!!***************************************Query4%20strating%20*********************Query:%20Find%20the%20names%20of%20sailors%20who%20have%20reserved%20a%20boat%20%20%20%20%20%20%20and%20print%20each%20name%20once.%20%20SELECT%20DISTINCT%20S.sname%20%20FROM%20%20%20Sailors%20S,%20Reserves%20R%20%20WHERE%20%20S.sid%20=%20R.sid(Tests%20FileScan,%20Projection,%20Sort-Merge%20Join%20and%20Duplication%20elimination.)[David%20Dewitt][Jeff%20Naughton][Mike%20Carey][Miron%20Livny][Raghu%20Ramakrishnan][Yannis%20Ioannidis]Query4%20completed%20successfully!*******************Query4%20finished!!!***************************************Query5%20strating%20*********************Query:%20Find%20the%20names%20of%20old%20sailors%20or%20sailors%20with%20a%20rating%20less%20%20%20%20%20%20%20than%207,%20who%20have%20reserved%20a%20boat,%20(perhaps%20to%20increase%20the%20%20%20%20%20%20%20amount%20they%20have%20to%20pay%20to%20make%20a%20reservation).%20%20SELECT%20S.sname,%20S.rating,%20S.age%20%20FROM%20%20%20Sailors%20S,%20Reserves%20R%20%20WHERE%20%20S.sid%20=%20R.sid%20and%20(S.age%20&gt;%2040%20||%20S.rating%20&lt;%207)(Tests%20FileScan,%20Multiple%20Selection,%20Projection,%20and%20Sort-Merge%20Join.)[Mike%20Carey,%209,%2040.3][Mike%20Carey,%209,%2040.3][Mike%20Carey,%209,%2040.3][David%20Dewitt,%2010,%2047.2][David%20Dewitt,%2010,%2047.2][Jeff%20Naughton,%205,%2035.0][Yannis%20Ioannidis,%208,%2040.2]Query5%20completed%20successfully!*******************Query5%20finished!!!*****************Finished%20joins%20testingjoin%20tests%20completed%20successfullymake[1]:%20Leaving%20directory%20&#x27;&#x2F;home&#x2F;machine7&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src&#x2F;tests&#x27;]0;machine7@machine7-VirtualBox:%20~&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src[01;32mmachine7@machine7-VirtualBox[00m:[01;34m~&#x2F;Desktop&#x2F;Database_Management_System_Implementation&#x2F;minjava&#x2F;javaminibase&#x2F;src[00m"/> exit
   
 Script done on 2021-01-25 18:32:39-07:00 [COMMAND_EXIT_CODE="0"]
   
